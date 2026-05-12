@@ -4,6 +4,7 @@
 
 using Godot;
 using Polytoria.Attributes;
+using Polytoria.Utils;
 using System;
 
 namespace Polytoria.Scripting.Datatypes;
@@ -225,20 +226,6 @@ public class PTVector3 : IScriptGDObject
 	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 Rotated(PTVector3 val, PTVector3 axis, float angle) => FromGDClass(val.vector.Rotated(axis.vector, angle));
 	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 LimitLength(PTVector3 val, float length) => FromGDClass(val.vector.LimitLength(length));
 	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 Clamp(PTVector3 val, PTVector3 min, PTVector3 max) => FromGDClass(val.vector.Clamp(min.vector, max.vector));
-
-	[ScriptMethod(ConvertParamsToGD = false)]
-	public static PTVector3 RadToDeg(PTVector3 val) => FromGDClass(new()
-	{
-		X = Mathf.RadToDeg(val.X),
-		Y = Mathf.RadToDeg(val.Y),
-		Z = Mathf.RadToDeg(val.Z),
-	});
-
-	[ScriptMethod(ConvertParamsToGD = false)]
-	public static PTVector3 DegToRad(PTVector3 val) => FromGDClass(new()
-	{
-		X = Mathf.DegToRad(val.X),
-		Y = Mathf.DegToRad(val.Y),
-		Z = Mathf.DegToRad(val.Z),
-	});
+	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 RadToDeg(PTVector3 val) => FromGDClass(val.vector.RadToDeg());
+	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 DegToRad(PTVector3 val) => FromGDClass(val.vector.DegToRad());
 }
