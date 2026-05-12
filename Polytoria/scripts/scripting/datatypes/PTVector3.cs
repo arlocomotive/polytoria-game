@@ -202,7 +202,7 @@ public class PTVector3 : IScriptGDObject
 	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 MoveTowards(PTVector3 current, PTVector3 target, float maxDistanceDelta) => FromGDClass(current.vector.MoveToward(target.vector, maxDistanceDelta));
 	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 Normalize(PTVector3 value) => FromGDClass(value.vector.Normalized());
 	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 Project(PTVector3 vector, PTVector3 onNormal) => FromGDClass(vector.vector.Project(onNormal.vector));
-	//public static Vector3 ProjectOnPlane(Vector3 vector, Vector3 planeNormal) => vector.ProjectOnPlane(planeNormal);
+	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 ProjectOnPlane(PTVector3 vector, PTVector3 planeNormal) => FromGDClass(vector.vector.Slide(planeNormal.vector.Normalized()));
 	[ScriptMethod(ConvertParamsToGD = false)] public static PTVector3 Reflect(PTVector3 inDirection, PTVector3 inNormal) => FromGDClass(inDirection.vector.Reflect(inNormal.vector));
 	//[ScriptMethod] public static Vector3 RotateTowards(Vector3 current, Vector3 target, float maxRadiansDelta, float maxMagnitudeDelta) => current.RotateTowards(current, target, maxRadiansDelta, maxMagnitudeDelta);
 	//public static Vector3 Scale(Vector3 a, Vector3 b) => a.Scale(b);
