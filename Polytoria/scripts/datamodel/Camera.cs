@@ -42,8 +42,8 @@ public sealed partial class Camera : Dynamic
 	private bool _ctrlLocked = false;
 	private bool _alwaysLocked = false;
 
-	private float _nearPlaneZ;
-	private float _farPlaneZ;
+	private float _near;
+	private float _far;
 
 	private float _moveSpeed = 8f;
 	private readonly float _rotateSpeed = 0.005f;
@@ -190,23 +190,23 @@ public sealed partial class Camera : Dynamic
 	}
 
 	[Editable, ScriptProperty, DefaultValue(0.05f)]
-	public float NearPlaneZ
+	public float Near
 	{
-		get => _nearPlaneZ;
+		get => _near;
 		set
 		{
-			_nearPlaneZ = Camera3D.Near = value;
+			_near = Camera3D.Near = value;
 			OnPropertyChanged();
 		}
 	}
 
 	[Editable, ScriptProperty, DefaultValue(4000f)]
-	public float FarPlaneZ
+	public float Far
 	{
-		get => _farPlaneZ;
+		get => _far;
 		set
 		{
-			_farPlaneZ = Camera3D.Far = value;
+			_far = Camera3D.Far = value;
 			OnPropertyChanged();
 		}
 	}
