@@ -20,6 +20,7 @@ public sealed partial class Camera : Dynamic
 	public const float ClipSafeMargin = 2.0f;
 	public const float DefaultZoomDistance = 10.0f;
 	public const float DefaultScrollSensitivity = 15.0f;
+
 	private CameraModeEnum _mode;
 	private float _fov;
 	private bool _clipThroughWalls;
@@ -316,6 +317,7 @@ public sealed partial class Camera : Dynamic
 		set => _target = value;
 	}
 
+	[ScriptEnum]
 	public enum CameraModeEnum
 	{
 		Follow = 0,
@@ -417,11 +419,20 @@ public sealed partial class Camera : Dynamic
 		{
 			if (Root.Input.IsGameFocused)
 			{
+				if (Input.IsActionPressed("zoom_in"))
+				{
+					_targetZoom = _distance - (ScrollSensitivity / 5);
+				}
+				if (Input.IsActionPressed("zoom_out"))
+				{
+					_targetZoom = _distance + (ScrollSensitivity / 5);
+				}
+
 				// Handle Controller Right stick input
 				float xAxis = Input.GetAxis("cam_rightward", "cam_leftward");
 				float yAxis = Input.GetAxis("cam_downward", "cam_upward");
 
-				_targetRotation += new Vector3(yAxis, xAxis, 0) * Sensitivity;
+				_targetRotation += new Vector3(yAxis * VerticalSpeed * 2, xAxis * HorizontalSpeed * 3, 0) * (Sensitivity * (float)delta);
 				LimitRotation();
 			}
 
@@ -633,7 +644,11 @@ public sealed partial class Camera : Dynamic
 	{
 		if (Mode != CameraModeEnum.Follow) return;
 		_turning = true;
+
+		Vector2 screenCenter = GDNode.GetViewport().GetVisibleRect().GetCenter();
 		_turnStartPos = GDNode.GetViewport().GetMousePosition();
+		GDNode.GetViewport().WarpMouse(screenCenter);
+
 		Root.Input.OverrideMousePosTo = Root.Input.MousePosition;
 		Root.Input.OverrideMousePos = true;
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -806,12 +821,12 @@ public sealed partial class Camera : Dynamic
 
 	private void SnapForward()
 	{
-		Position += Forward * _moveSpeed / 10;
+		Position += Forward * -_moveSpeed / 10;
 	}
 
 	private void SnapBackward()
 	{
-		Position += Forward * -_moveSpeed / 10;
+		Position += Forward * _moveSpeed / 10;
 	}
 
 	public void ReceiveDragTouchInput(InputEventScreenDrag dragEvent)
@@ -990,7 +1005,8 @@ public sealed partial class Camera : Dynamic
 		if (World.Current == null) throw new InvalidOperationException("World is null");
 		Transform3D globalTransform = GetGlobalTransform();
 		Vector3 origin = globalTransform.Origin;
-		Vector3 direction = globalTransform.Basis.Z;
+		// In GoDot the Z axis points to the Camera
+		Vector3 direction = -globalTransform.Basis.Z;
 
 		Datamodel.Environment.RayResult? hit = GetPlacementRay(ignoreList);
 
@@ -1009,7 +1025,8 @@ public sealed partial class Camera : Dynamic
 		if (World.Current == null) throw new InvalidOperationException("World is null");
 		Transform3D globalTransform = GetGlobalTransform();
 		Vector3 origin = globalTransform.Origin;
-		Vector3 direction = globalTransform.Basis.Z;
+		// In GoDot the Z axis points to the Camera
+		Vector3 direction = -globalTransform.Basis.Z;
 
 		return World.Current.Environment.Raycast(origin, direction, 20, ignoreList);
 	}
