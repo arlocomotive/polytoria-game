@@ -711,24 +711,20 @@ public sealed partial class LuauProvider : IScriptLanguageProvider
 
 		Stopwatch sw = Stopwatch.StartNew();
 
+		void callback()
+		{
+			lua.PushNumber(sw.Elapsed.TotalSeconds);
+			tcs.SetResult(1);
+		}
+
 		if (n > 0)
 		{
 			decimal wakeTime = script.Root.UpTime + (decimal)n;
-			script.Root.Hooks.EnqueueTimed(wakeTime, () =>
-			{
-				lua.PushNumber(sw.Elapsed.TotalSeconds);
-				tcs.SetResult(1);
-			});
+			script.Root.Hooks.EnqueueTimed(wakeTime, callback);
 		}
 		else
 		{
-			async void run()
-			{
-				await Globals.Singleton.WaitPhysicsFrame();
-				lua.PushNumber(sw.Elapsed.TotalSeconds);
-				tcs.SetResult(1);
-			}
-			run();
+			script.Root.Hooks.PhysicsUpdated.Once(callback);
 		}
 
 		return lua.Yield(1);
@@ -944,8 +940,7 @@ public sealed partial class LuauProvider : IScriptLanguageProvider
 	{
 		LuaState state = LuaState.FromIntPtr(L);
 
-		bool hasTime = state.IsNumber(1);
-		double seconds = hasTime ? state.ToNumber(1) : 0;
+		double seconds = state.IsNumber(1) ? state.ToNumber(1) : 0;
 
 		bool isThread = state.IsThread(2);
 		if (!state.IsFunction(2) && !isThread)
@@ -990,40 +985,26 @@ public sealed partial class LuauProvider : IScriptLanguageProvider
 			state.XMove(co, numArgs);
 		}
 
-		if (hasTime)
+		async void callback()
+		{
+			try
+			{
+				await ResumeThread(co, null, numArgs);
+			}
+			finally
+			{
+				co.Unref(coRef);
+			}
+		}
+
+		if (seconds > 0)
 		{
 			decimal wakeTime = script.Root.UpTime + (decimal)seconds;
-			script.Root.Hooks.EnqueueTimed(wakeTime, () =>
-			{
-				async void run()
-				{
-					try
-					{
-						await ResumeThread(co, null, numArgs);
-					}
-					finally
-					{
-						co.Unref(coRef);
-					}
-				}
-				run();
-			});
+			script.Root.Hooks.EnqueueTimed(wakeTime, callback);
 		}
 		else
 		{
-			async void run()
-			{
-				await Globals.Singleton.WaitPhysicsFrame();
-				try
-				{
-					await ResumeThread(co, null, numArgs);
-				}
-				finally
-				{
-					co.Unref(coRef);
-				}
-			}
-			run();
+			script.Root.Hooks.PhysicsUpdated.Once(callback);
 		}
 
 		PushCSClass(state, new PTTask { Thread = co });
