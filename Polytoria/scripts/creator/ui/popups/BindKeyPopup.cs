@@ -34,12 +34,14 @@ public sealed partial class BindKeyPopup : PopupWindowBase
 		_bindBtn.GuiInput += OnBindGuiInput;
 		_okBtn.Pressed += OnOK;
 
+		_viewTree.ItemSelected += OnItemSelected;
+
 		TreeItem root = _viewTree.CreateItem();
 		bool isFirst = true;
 
 		foreach (var v in Enum.GetValues<KeyCodeEnum>())
 		{
-			if (v is KeyCodeEnum.None or KeyCodeEnum.Unknown) continue;
+			if (v.IsInvalid()) continue;
 
 			TreeItem ch = root.CreateChild();
 			ch.SetText(0, v.ToString());
@@ -63,8 +65,6 @@ public sealed partial class BindKeyPopup : PopupWindowBase
 
 		base._ExitTree();
 	}
-
-	private KeyModeEnum GetKeyMode() => (KeyModeEnum)_keyModeOpt.Selected;
 
 	private void OnCancel()
 	{
@@ -91,4 +91,14 @@ public sealed partial class BindKeyPopup : PopupWindowBase
 			_viewTree.ScrollToItem(ch, true);
 		}
 	}
+
+	private void OnItemSelected()
+	{
+		if (_itemToKeycode.TryGetValue(_viewTree.GetSelected(), out KeyCodeEnum val))
+		{
+			_keyModeOpt.Visible = !val.IsNonKey();
+		}
+	}
+
+	private KeyModeEnum GetKeyMode() => (KeyModeEnum)_keyModeOpt.Selected;
 }

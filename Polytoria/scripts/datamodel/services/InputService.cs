@@ -584,7 +584,7 @@ public sealed partial class InputService : Instance
 			_ => null
 		};
 		result = Enum.TryParse(keyName, false, out KeyCodeEnum keyCode) ? keyCode : KeyCodeEnum.Unknown;
-		return result is not (KeyCodeEnum.None or KeyCodeEnum.Unknown);
+		return !result.IsInvalid();
 	}
 
 	[ScriptMethod]
@@ -704,20 +704,8 @@ public sealed partial class InputService : Instance
 					}
 				}
 
+				btn.IsPressed = pressed;
 				btn.Weight = weight;
-				if (btn.IsPressed != pressed)
-				{
-					btn.IsPressed = pressed;
-
-					if (pressed)
-					{
-						btn.Pressed.Invoke();
-					}
-					else
-					{
-						btn.Released.Invoke();
-					}
-				}
 			}
 			else if (a is InputActionAxis axis)
 			{
@@ -745,7 +733,7 @@ public sealed partial class InputService : Instance
 					}
 				}
 
-				axis.Value = Mathf.Clamp(pos - neg, -1f, 1f);
+				axis.Value = pos - neg;
 			}
 			else if (a is InputActionVector2 v2)
 			{
@@ -791,14 +779,7 @@ public sealed partial class InputService : Instance
 					}
 				}
 
-				Vector2 finalVal = new(right - left, up - down);
-
-				if (finalVal.LengthSquared() > 1f)
-				{
-					finalVal = finalVal.Normalized();
-				}
-
-				v2.Value = finalVal;
+				v2.Value = new(right - left, up - down);
 			}
 		}
 	}

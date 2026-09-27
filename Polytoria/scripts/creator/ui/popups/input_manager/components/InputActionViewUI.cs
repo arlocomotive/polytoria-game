@@ -75,10 +75,13 @@ public partial class InputActionViewUI : Control
 
 	private void OnActionLabelGuiInput(InputEvent @event)
 	{
-		if (@event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left })
+		if (@event is InputEventMouseButton m)
 		{
-			_actionNameEdit.Visible = true;
-			_actionNameEdit.GrabFocus();
+			if (m.Pressed && m.ButtonIndex == MouseButton.Left)
+			{
+				_actionNameEdit.Visible = true;
+				_actionNameEdit.GrabFocus();
+			}
 		}
 	}
 }

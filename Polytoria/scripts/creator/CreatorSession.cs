@@ -913,14 +913,14 @@ return module";
 			InputActionAxis h = InputMap.BindAxis("Horizontal");
 			h.Positive.AddButton(new() { KeyCode = Enums.KeyCodeEnum.D, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
 			h.Positive.AddButton(new() { KeyCode = Enums.KeyCodeEnum.Right, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
-			h.Positive.AddButton(new() { KeyCode = Enums.KeyCodeEnum.GamepadAxisLeftX, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
+			h.Positive.AddButton(new() { KeyCode = Enums.KeyCodeEnum.GamepadAxisLeftX });
 			h.Negative.AddButton(new() { KeyCode = Enums.KeyCodeEnum.A, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
 			h.Negative.AddButton(new() { KeyCode = Enums.KeyCodeEnum.Left, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
 
 			InputActionAxis v = InputMap.BindAxis("Vertical");
 			v.Positive.AddButton(new() { KeyCode = Enums.KeyCodeEnum.W, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
 			v.Positive.AddButton(new() { KeyCode = Enums.KeyCodeEnum.Up, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
-			v.Positive.AddButton(new() { KeyCode = Enums.KeyCodeEnum.GamepadAxisLeftY, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
+			v.Positive.AddButton(new() { KeyCode = Enums.KeyCodeEnum.GamepadAxisLeftY });
 			v.Negative.AddButton(new() { KeyCode = Enums.KeyCodeEnum.S, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
 			v.Negative.AddButton(new() { KeyCode = Enums.KeyCodeEnum.Down, KeyMode = Enums.KeyModeEnum.PhysicalKeyCode });
 

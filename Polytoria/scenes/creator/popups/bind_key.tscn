@@ -97,6 +97,7 @@ hide_root = true
 scroll_horizontal_enabled = false
 
 [node name="KeyMode" type="OptionButton" parent="Control/VBoxContainer" unique_id=1010759435]
+visible = false
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_3qgo3")
 theme_override_styles/focus = SubResource("StyleBoxFlat_qhw8l")
