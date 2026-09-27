@@ -88,7 +88,8 @@ public record InputButton : IScriptObject
 	private KeyCodeEnum _keyCode = KeyCodeEnum.None;
 	private KeyModeEnum _keyMode = KeyModeEnum.KeyCode;
 
-	[ScriptProperty] public KeyCodeEnum KeyCode
+	[ScriptProperty]
+	public KeyCodeEnum KeyCode
 	{
 		get => _keyCode;
 		set
@@ -97,7 +98,8 @@ public record InputButton : IScriptObject
 			EnforceKeyMode();
 		}
 	}
-	[ScriptProperty] public KeyModeEnum KeyMode
+	[ScriptProperty]
+	public KeyModeEnum KeyMode
 	{
 		get => _keyMode;
 		set
@@ -149,7 +151,8 @@ public class InputActionVector2 : InputAction
 	[ScriptProperty] public InputButtonCollection Left { get; set; } = [];
 	[ScriptProperty] public InputButtonCollection Right { get; set; } = [];
 
-	[ScriptProperty, JsonIgnore] public Vector2 Value
+	[ScriptProperty, JsonIgnore]
+	public Vector2 Value
 	{
 		get => _vectorValue;
 		internal set
@@ -165,7 +168,8 @@ public class InputActionButton : InputAction
 
 	[ScriptProperty] public InputButtonCollection Buttons { get; set; } = [];
 
-	[ScriptProperty, JsonIgnore] public bool IsPressed
+	[ScriptProperty, JsonIgnore]
+	public bool IsPressed
 	{
 		get => _isPressed;
 		internal set
@@ -196,7 +200,8 @@ public class InputActionAxis : InputAction
 	[ScriptProperty] public InputButtonCollection Negative { get; set; } = [];
 	[ScriptProperty] public InputButtonCollection Positive { get; set; } = [];
 
-	[ScriptProperty, JsonIgnore] public float Value
+	[ScriptProperty, JsonIgnore]
+	public float Value
 	{
 		get => _axisValue;
 		internal set
